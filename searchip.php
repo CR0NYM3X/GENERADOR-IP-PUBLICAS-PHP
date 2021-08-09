@@ -41,8 +41,11 @@ Las direcciones del bloque que va de 240.0.0.0 a 255.255.255.254 se indican como
 
 # Total ips: 4,294,967,295
 
-#1.1.111.23
-# 1.1.234.219  
+
+
+
+// Cuando el Octeto1 este en numero 5 eso quiere decir que ya gasto 3GB de espacio de disco duro ahora si calculamos el espacio total que usaremos= 255/5 =51 ahora multiplicamos 51*3= 153GB
+
 
 #  0	.	0	.	0	.	0
 $Oct1=0; $Oct2=0; $Oct3=0; $Oct4=0;
@@ -103,11 +106,7 @@ function paraPagina($var1=null,$var2=null,$var3=0){
 function insertSQL($ip,$conexion)
 {
 
-
-
 	$sql= "INSERT INTO ips (ip) VALUES ( '".$ip."')"; 
-
-
 	// En caso de un Error al guardar, se mostrara en el archivo llamado Error.txt 
 	if (!(mysqli_query($conexion, $sql))) {
 
@@ -117,7 +116,6 @@ function insertSQL($ip,$conexion)
 
 	}
 	
-
 }
 
 
