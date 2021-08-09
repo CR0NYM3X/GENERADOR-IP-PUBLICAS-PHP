@@ -50,7 +50,7 @@ $Oct1=0; $Oct2=0; $Oct3=0; $Oct4=0;
 
 $ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
 
-$mascara=5;
+$mascara=255;
 
 $cntIPS=1;  $CalculoIP=pow(($mascara+1), 4);
 
@@ -95,6 +95,31 @@ function paraPagina($var1=null,$var2=null,$var3=0){
 
 
 
+	$conexion= mysqli_connect("127.0.0.1","root",""); // ip - usuario - contraseña
+	mysqli_select_db($conexion,"dataips");  // nombre base de datos
+	mysqli_set_charset($conexion,"utf8");
+
+
+function insertSQL($ip,$conexion)
+{
+
+
+
+	$sql= "INSERT INTO ips (ip) VALUES ( '".$ip."')"; 
+
+
+	// En caso de un Error al guardar, se mostrara en el archivo llamado Error.txt 
+	if (!(mysqli_query($conexion, $sql))) {
+
+		$Data = fopen("Error Sql insert.txt", "a");
+		fwrite($Data, "ERROR SQL   ".date('m-d-Y h:i:s a', time())." | $sql ". PHP_EOL);
+		fclose($Data);
+
+	}
+	
+
+}
+
 
 
 
@@ -122,18 +147,14 @@ while (true)
 		}
 
 
-		echo "\n".$ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
-		
+		$ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
+		insertSQL($ip,$conexion);
 
-		//$ConsultaIPS.=",".$ip;
-		array_push($ConsultaIPS,$ip);
+			//$ConsultaIPS.=",".$ip;
+		#array_push($ConsultaIPS,$ip);
+			// Aqui manda las ip para ser trabajadas
+		#paraPagina($cntIPS,$MostrarCantidad);
 
-
-		// Aqui manda las ip para ser trabajadas
-		paraPagina($cntIPS,$MostrarCantidad);
-
-		// while(pcntl_waitpid(0, $status) != -1);
-	
 
 	}
 
@@ -157,13 +178,12 @@ while (true)
 		}
 
 		$ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
-		//$ConsultaIPS.=",".$ip;
-		array_push($ConsultaIPS,$ip);
-
-
-		 paraPagina($cntIPS,$MostrarCantidad);
-		// while(pcntl_waitpid(0, $status) != -1);
-
+		insertSQL($ip,$conexion);
+		
+			//$ConsultaIPS.=",".$ip;
+		#array_push($ConsultaIPS,$ip);
+		#paraPagina($cntIPS,$MostrarCantidad);
+		
 
 	}
 
@@ -203,13 +223,12 @@ while (true)
 
 
 
-		$ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
+		echo "\n".$ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
+		insertSQL($ip,$conexion);
 		//$ConsultaIPS.=",".$ip;
-		array_push($ConsultaIPS,$ip);
+		#array_push($ConsultaIPS,$ip);
+		#paraPagina($cntIPS,$MostrarCantidad);
 
-
-		 paraPagina($cntIPS,$MostrarCantidad);
-		// while(pcntl_waitpid(0, $status) != -1);
 
 	
 
@@ -236,23 +255,23 @@ while (true)
 
 
 			$ip= $Oct1.'.'.$Oct2.'.'.$Oct3.'.'.$Oct4;
+			insertSQL($ip,$conexion);
 
 			//$ConsultaIPS.=",".$ip;
-			array_push($ConsultaIPS,$ip);
+			#array_push($ConsultaIPS,$ip);
+			#paraPagina($cntIPS,$MostrarCantidad);
 
-			 paraPagina($cntIPS,$MostrarCantidad);
-			// while(pcntl_waitpid(0, $status) != -1);
 
 
 	}
 
 
-		/*
+		
 		if ($cntIPS==$i) {
 			$i+=$i;
 			echo $cntIPS."\n";
 		}
-		*/
+		
 
 
 
@@ -263,10 +282,10 @@ while (true)
 
 
 		if ( empty($ConsultaIPS) ) {
-				//echo "---------> ".substr($ConsultaIPS, 1)."\n";
-				array_push($ConsultaIPS,$ip);
-				 paraPagina($cntIPS,$MostrarCantidad);
-				// while(pcntl_waitpid(0, $status) != -1);
+
+				#array_push($ConsultaIPS,$ip);
+				#paraPagina($cntIPS,$MostrarCantidad);
+
 		}
 
 
@@ -274,6 +293,7 @@ while (true)
 		echo "\n ".date('m-d-Y h:i:s a', time()); 
 		echo  "\n"." IP Contadas : ".$cntIPS." y IP Calculadas : ".$CalculoIP;
 		echo "\n Cantidad de consultas internet : ".$cntConsultas;
+		mysqli_close($conexion);
 		break;
 
 	}
